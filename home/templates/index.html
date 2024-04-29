@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}SafarNaama{% endblock title%}
+   {% block body%}
+    <!-- Heading starts -->
+    <div class ="container-fluid my-2">
+        <div class="jumbotron" style = "background-color : blue; color : white;" >
+            <h1 class="display-4">Want to Travel? You're at right place!</h1>
+            <p class="lead">Get high discounts and assurity of safe and excited tour with SafarNama.</p>
+            <!-- <hr class="my-4">
+            <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
+            <p class="lead">
+              <a class="btn btn-info btn-lg" href="#explore" role="button">Explore</a>
+            </p>
+        </div>
+    <div>    
+    <!-- Heading ends -->
+
+    <!-- search starts -->
+    <div class = "col-md-8 offset-md-2 w-75 p-3">
+        <div class="input-group">
+            <input type="search" class="form-control rounded-pill p-4" placeholder="Where do you want to go?" aria-label="Search" aria-describedby="search-addon" />
+            <button type="button" class=" ml-2 btn btn-outline-primary rounded-pill px-4">search</button>
+        </div>
+    </div>
+    <!-- search ends -->
+
+    <div class ="container" id='explore'>
+      <div class="row ">
+          {% for x in data %}
+          <div class="col-sm my-2">
+              <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
+                <img class="card-img-top" src="{{ x.photo.url }}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title" border>{{ x.title }}</h5>
+                  <a href='/destinations' class="btn btn-primary" >View Places</a>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div
+
+
+{% endblock body %}
+  

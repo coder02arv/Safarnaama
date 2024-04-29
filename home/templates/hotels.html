@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Hotels{% endblock title%}
+{% block body %}
+    <div class ="container">
+        <div class="row ">
+            {% for x in data %}
+            <div class="col-sm my-2">
+                <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
+                  <img class="card-img-top" src="{{ x.photo.url }}" alt="Card image cap">
+                  <div class="card-body">
+                    <h6>{{ x.name }}</h6>
+                    <button href='#' class="btn btn-info my-1" data-toggle="modal" data-target="#exampleModal" >More</button>
+                    <a href='/checkout' class="btn btn-warning">From ₹{{x.price}} </a>
+                  </div>
+                </div>
+            </div>
+             <!-- Button trigger modal -->
+
+            {% endfor %}
+        </div>
+    </div>
+    
+   <!-- Modal -->
+   
+{% endblock body %}
+    
+    
+

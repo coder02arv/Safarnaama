@@ -1,0 +1,442 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+    integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <script src="{% static 'js/home.js' %}"></script>
+  <title>{% block title %} {% endblock title%}</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+
+
+    .homeContainer {
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+  </style>
+ 
+
+</head>
+
+<body>
+
+  <!-- nav bar starts -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">
+      <img src="{%static 'logo.svg'%}" width="30" height="30" alt=""> SafarNaama
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/hotels">Stays<span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Flights</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            More{% comment %} <img src="{%static 'plus.png'%}" width="30" height="30" alt=""> {% endcomment %}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#"><img src="{%static 'baby-car.png'%}" width="30" height="30" alt=""> Car
+              Rentals</a>
+            <a class="dropdown-item" href="#"><img src="{%static 'attraction.png'%}" width="30" height="30" alt="">
+              Attraction</a>
+            <!-- <div class="dropdown-divider"></div> -->
+            <a class="dropdown-item" href="#"><img src="{%static 'taxi.png'%}" width="30" height="30" alt=""> Airport
+              taxis</a>
+          </div>
+        </li>
+      </ul>
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href='#' id="navbarDropdown" role="button" data-toggle="dropdown"> Welcome 
+            <img src="{%static 'user.png'%}" width="30" height="30" alt="">  </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/logout">Logout</b></a>
+            <a class="dropdown-item" href="/userbookings">Your Bookings</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    {% else %}
+    <button type="button" class="btn btn-warning text-right mx-1 rounded-pill" data-toggle="modal"
+      data-target="#loginModal">Log-In</button>
+    <button type="button" class="btn btn-dark text-right rounded-pill" data-toggle="modal"
+      data-target="#signupModal">Sign-Up</button>
+    {% endif %}
+    </div>
+  </nav>
+  {% if not user.is_authenticated %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Warning: </strong> Please log in
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+  <!-- nav bar ends -->
+
+  <!-- sign up Modal -->
+  <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupModalHeading">Sign Up</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" action="/signup" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">User Name </label>
+              <input type="text" class="form-control" id="username" name="username"
+                placeholder="Choose a unique Username(lowercase and alphanumeric)" required>
+            </div>
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="Email" name = "email" required>
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+              <label for="pass1">Choose Password</label>
+              <input type="password" class="form-control" id="pass1" name = "pass1" placeholder="Enter Password" required>
+            </div>
+            <div class="form-group">
+              <label for="pass2">Confirm Password</label>
+              <input type="password" class="form-control" id="pass2" name = "pass2" placeholder="Confirm Password" required>
+            </div>
+            <button type="submit" style="width:100%;" class="btn btn-primary">Submit</button>
+            
+          </form> 
+        </div>
+        <div class="modal-footer">
+        
+          <button type="button" class="btn btn-info" data-toggle="modal"
+            data-target="#signupModalPhoneNumber" id = 'loginPhoneNumber' onclick = "helper()" style="width:100%;">SignUp Using Phone Number</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- login modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalHeading">Log In</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" action="/login" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">User Name</label>
+              <input type="text" class="form-control" id="loginusername" name="loginusername"
+                placeholder="Choose a unique Username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="loginpassword" placeholder="Password" name = "loginpassword" required>
+            </div>
+            <button type="submit" style="width:100%;" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- otp login modal -->
+  <div class="modal fade" id="loginModalOTP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalHeading">Log In Using OTP</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" action="#" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <div class="form-group">
+                <label for="username">Name</label>
+                <input type="text" class="form-control" id="loginusernameOTP" name="loginusernameOTP"
+                  placeholder="Your Name" required>
+              </div>
+              <label for="phone_number">Phone Number</label>
+              <input type="text" class="form-control" id="loginphonenumberOTP" name="loginphonenumberOTP"
+                placeholder="Your Phone Number" required>
+            </div>
+            <button  type="submit" class="btn btn-primary" id = 'otp'>Get OTP</button>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="signupModalPhoneNumber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupModalHeading">Sign Up</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" action="/signup" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">User Name </label>
+              <input type="text" class="form-control" id="username" name="username"
+                placeholder="Choose a unique Username(lowercase and alphanumeric)" required>
+            </div>
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <input type="text" class="form-control" id="signupphonenumber" name="signupphonenumber"
+              placeholder="Your Phone Number" required>
+            </div>
+            <div class="form-group">
+              <label for="pass1">Choose Password</label>
+              <input type="password" class="form-control" id="pass1" name = "pass1" placeholder="Enter Password" required>
+            </div>
+            <div class="form-group">
+              <label for="pass2">Confirm Password</label>
+              <input type="password" class="form-control" id="pass2" name = "pass2" placeholder="Confirm Password" required>
+            </div>
+            <button type="submit" style="width:100%;" class="btn btn-primary">Submit</button>
+          </form> 
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="confirm_payment_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalHeading">Booking Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" action="/OTP" method="POST">
+          {% csrf_token %}
+          
+            <h3 id = "amountShow"  ></h3> 
+            <small id = "go" style ="color:green; font-weight:bold;" class = "mb-2" > </small>
+        
+        </form>
+        <button style="width:100%;" type="button" class="btn btn-primary" id = 'complete_payment' onClick = 'complete_payment()'><b>Confirm</b></button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="booking_confirmed_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalHeading">Your Booking is confirmed <img src="{%static 'checked.png'%}" width="30" height="30" alt=""></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- displaying messages -->
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    <strong>Message: </strong> {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+
+
+  <!-- body starts -->
+  {% block body %}
+
+  {% endblock body %}
+  <!-- body ends -->
+
+  <!-- footer starts -->
+
+  <div class="jumbotron my-4 text-center" style="background-color : #86C8BC; color : white;">
+    <h4 class="display-4">About Us</h1>
+      <p class="lead">We are a team building a affordable tourist website.</p>
+      <p>Copyright 2022 &copy; All rights reserved</p>
+      <!-- <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
+
+  </div>
+
+  <!--footer end-->
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script>
+
+
+    function helper(){
+      $('#signupModal').modal('hide');
+    }
+
+    function showLoader(){
+      
+    }
+
+    function confirm_payment(){
+
+      number_of_rooms = document.getElementById('booking_rooms').value;
+      number_of_peoples = document.getElementById('booking_adults').value;
+      amount = (number_of_peoples/2)*number_of_rooms*500;
+      let html = '', data = '';
+
+      if(amount == 0){
+         html = "Please enter valid details";
+         document.getElementById('complete_payment').style.display='none';
+      }
+      else{
+          html = "Your amount is "  + "₹" +   amount;
+          data = 'Click on Confirm to proceed further'
+          document.getElementById('complete_payment').style.display='block';
+      }
+      document.getElementById('amountShow').innerHTML = html;
+      document.getElementById('go').innerHTML = data;
+      $('#confirm_payment_modal').modal('show');
+    }
+    function getCsrfToken() {
+      var CSRF_TOKEN = $('input[name="csrfmiddlewaretoken"]').val();
+      return CSRF_TOKEN;
+    }
+    function complete_payment(){
+
+      let name = document.getElementById('booking_name').value
+      let phone_number = document.getElementById('booking_phone_number').value
+      let number_of_peoples = document.getElementById('booking_adults').value
+      let number_of_rooms = document.getElementById('booking_rooms').value
+      let check_in_date = document.getElementById('booking_check_in_date').value
+      let chekout_out_date = document.getElementById('booking_chekout_out_date').value
+      number_of_rooms = document.getElementById('booking_rooms').value;
+      number_of_peoples = document.getElementById('booking_adults').value;
+      amount = (number_of_peoples/2)*number_of_rooms*500;
+      var json_string = JSON.stringify({
+        "name" : name,
+        "phone_number" : phone_number,
+        "number_of_peoples" : number_of_peoples, 
+        "number_of_rooms" : number_of_rooms,
+        "check_in_date" : check_in_date,
+        "chekout_out_date" : chekout_out_date,
+        "amount" : amount
+      });
+      console.log(json_string)
+      var csrf_token = getCsrfToken();
+      var xhttp = new XMLHttpRequest();
+      var params = "json_string=" + json_string;
+      xhttp.open("POST", "/booking", true);
+      xhttp.setRequestHeader("X-CSRFToken", csrf_token);
+      xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhttp.onreadystatechange = function () {
+          if(this.readyState != 4){
+            showLoader();
+          }
+          if (this.readyState == 4 && this.status == 201) {
+            console.log("api returns")
+            $('#confirm_payment_modal').modal('hide');
+            $('#booking_confirmed_modal').modal('show');
+          }
+
+      };
+      xhttp.send(params);
+    }
+
+    function get_otp(){
+      $('#loginModalOTP').modal('hide');
+    }
+  </script>
+ 
+</body>
+
+</html>

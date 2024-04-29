@@ -1,0 +1,54 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Checkout{% endblock title%}
+{% block body %}
+
+
+
+  <div class="container my-4 p-4" >
+      <div class="alert alert-info" role="alert">
+      <h3 class  = "text-center">Please fill the details for {{hotelname}}</h3>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img src = "{% static 'details.jpg' %}" style = "width: 350px">
+        </div>
+        <div class="col">
+          <form class = "p-4" method = 'post'>
+              {% csrf_token %}
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Name</label>
+              <input type="text" class="form-control" id="booking_name" name ="name"  placeholder="Enter Your Name " required>
+              </div>
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Phone Number</label>
+              <input type="text" class="form-control" id="booking_phone_number" name ="phone_number" placeholder="Enter Your Phone number" required>
+              </div>
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Number of Peoples</label>
+              <input type="text" class="form-control" id="booking_adults" name = "number_of_peoples" placeholder="Number of Adults" required> 
+              </div>
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Number of Rooms</label>
+              <input type="text" class="form-control" id="booking_rooms" name = "number_of_rooms" placeholder="Number of Rooms" required>
+              </div>
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Check In Date </label><br>
+              <input type="date" class = "form-control" id="booking_check_in_date" name = "check_in_date" placeholder="Enter Check in date " required>
+              </div>
+              <div class="form-group">
+              <label for="exampleFormControlInput1" class = "font-weight-bold">Check Out Date </label><br>
+              <input type="date" class = "form-control" id="booking_chekout_out_date" name="chekout_out_date" placeholder="Enter Checkout date" required>
+              </div>
+              <button href='#' class="btn btn-dark my-1 rounded-pill" style="width:100%;" type = 'button' onClick = 'confirm_payment()' {% if not user.is_authenticated %} disabled {% endif %} >Check Amount</button>
+            
+          </form>
+        </div>
+      </div>
+  </div>
+
+
+{% endblock body %}
+    
+    
+
